@@ -1,0 +1,14 @@
+# Amount of seconds in between every broadcast
+cooldown-interval: 10
+messages:
+  1:
+    permission: ""
+    sound: ""
+    message: "This is a single-line broadcast"
+  2:
+    permission: ""
+    sound:
+    message:
+      - "This is a"
+      - "Multi-line"
+      - "Broadcast"

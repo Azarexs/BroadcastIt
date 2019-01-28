@@ -1,0 +1,4 @@
+main: me.azarex.broadcastit.BroadcastIt
+name: BroadcastIt
+version: 1.0.0
+api-version: 1.12
