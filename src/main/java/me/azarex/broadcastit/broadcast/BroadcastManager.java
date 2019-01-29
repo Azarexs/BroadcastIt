@@ -6,6 +6,7 @@ import me.azarex.broadcastit.broadcast.messages.implementation.SingleLineMessage
 import me.azarex.broadcastit.broadcast.runner.BroadcastRunner;
 import me.azarex.broadcastit.configuration.Configuration;
 import me.azarex.broadcastit.utility.Colors;
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -29,6 +30,7 @@ public class BroadcastManager {
         ConfigurationSection section = (ConfigurationSection) configuration.get("messages");
 
         for (String key : section.getKeys(false)) {
+            final ConfigurationSection subSection = (ConfigurationSection) configuration.get(key);
             final String permission = (String) section.get(key + ".permission");
             final Sound sound = Sound.valueOf((String) section.get(key + ".sound"));
 
