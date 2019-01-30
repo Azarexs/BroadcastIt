@@ -13,6 +13,8 @@ import java.util.List;
 
 public class Broadcasts {
 
+    private Broadcasts() { }
+
     public static BroadcastMessage singleLine(String message, String permission, Sound sound) {
         return new BroadcastMessage() {
             @Override

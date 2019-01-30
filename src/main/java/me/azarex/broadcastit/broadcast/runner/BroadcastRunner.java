@@ -2,10 +2,10 @@ package me.azarex.broadcastit.broadcast.runner;
 
 import me.azarex.broadcastit.broadcast.messages.BroadcastMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -38,11 +38,13 @@ public class BroadcastRunner implements Runnable {
     }
 
     private void handleMessage(Set<Player> players, BroadcastMessage message) {
-        final Sound sound = message.sound();
+        players.forEach(handle(message));
+    }
 
-        players.forEach(player -> {
-            player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
+    private Consumer<Player> handle(BroadcastMessage message) {
+        return player -> {
+            player.playSound(player.getLocation(), message.sound(), 1.0f, 1.0f);
             message.send(player);
-        });
+        };
     }
 }
