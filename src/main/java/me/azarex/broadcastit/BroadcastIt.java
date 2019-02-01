@@ -1,8 +1,14 @@
 package me.azarex.broadcastit;
 
 import me.azarex.broadcastit.broadcast.BroadcastManager;
+import me.azarex.broadcastit.broadcast.messages.BroadcastBuilder;
+import me.azarex.broadcastit.broadcast.messages.BroadcastMessage;
+import me.azarex.broadcastit.command.CommandManager;
+import me.azarex.broadcastit.command.commands.BroadcastCommand;
 import me.azarex.broadcastit.configuration.Configuration;
 import me.azarex.broadcastit.configuration.ConfigurationService;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -29,5 +35,16 @@ public class BroadcastIt extends JavaPlugin {
 
         final int time = (int) configuration.get("cooldown-interval");
         getServer().getScheduler().runTaskTimer(this, broadcastManager.getRunner(), 0L, time * 20L);
+
+        CommandManager commandManager = new CommandManager(optional.get());
+        commandManager.register(new BroadcastCommand(optional.get()));
+
+        getCommand("broadcastit").setExecutor(commandManager.executor());
+    }
+
+    private int count(Inventory inventory, ItemStack targetItem) {
+        return inventory.all(targetItem).values().stream()
+                .mapToInt(ItemStack::getAmount)
+                .sum();
     }
 }

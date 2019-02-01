@@ -2,3 +2,8 @@ main: me.azarex.broadcastit.BroadcastIt
 name: BroadcastIt
 version: 1.0.0
 api-version: 1.12
+commands:
+  broadcastit:
+    aliases: [bi]
+    usage: /<command>
+    description: Base command for BroadcastIt!

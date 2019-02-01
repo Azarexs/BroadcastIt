@@ -6,6 +6,10 @@ public class MutableObject<T> implements Mutable<T> {
 
     private T value;
 
+    public MutableObject() {
+        this(null);
+    }
+
     public MutableObject(T value) {
         this.value = value;
     }

@@ -1,14 +1,19 @@
 # Amount of seconds in between every broadcast
-cooldown-interval: 10
-messages:
+Cooldown-interval: 10
+Messages:
   1:
-    permission: ""
-    sound: ""
-    message: "This is a single-line broadcast"
+    Permission: ""
+    Sound: ""
+    Message: "This is a single-line broadcast"
   2:
-    permission: ""
-    sound:
-    message:
+    Permission: ""
+    Sound:
+    Message:
       - "This is a"
       - "Multi-line"
       - "Broadcast"
+
+Language:
+  Prefix: "&e&l(&c&l!&e&l) "
+  Invalid-subcommand: "&c&lYou have entered an invalid subcommand!"
+  Not-enough-arguments: "&c&lNot enough arguments!"

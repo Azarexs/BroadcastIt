@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public interface Configuration {
 
@@ -52,6 +54,13 @@ public interface Configuration {
 
     default Object get(String key) {
         return getConfiguration().getValue().get(key);
+    }
+
+    default String get(String... key) {
+        return Stream.of(key)
+                .map(this::get)
+                .map(Object::toString)
+                .collect(Collectors.joining(" "));
     }
 
     static Configuration of(Path path) {

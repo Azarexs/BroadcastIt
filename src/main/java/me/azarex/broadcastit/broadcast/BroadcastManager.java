@@ -1,10 +1,11 @@
 package me.azarex.broadcastit.broadcast;
 
-import me.azarex.broadcastit.broadcast.factory.Broadcasts;
+import me.azarex.broadcastit.broadcast.messages.BroadcastBuilder;
 import me.azarex.broadcastit.broadcast.messages.BroadcastMessage;
 import me.azarex.broadcastit.broadcast.runner.BroadcastRunner;
 import me.azarex.broadcastit.configuration.Configuration;
 import me.azarex.broadcastit.utility.Colors;
+import me.azarex.broadcastit.utility.ComponentUtility;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
@@ -18,9 +19,9 @@ public class BroadcastManager {
     private Queue<BroadcastMessage> messages;
     private BroadcastRunner runner;
 
-    private static final String MESSAGE_PATH = ".message",
-                                HOVER_PATH = "hover",
-                                CLICK_PATH = "click";
+    private static final String MESSAGE_PATH = ".message";
+    private static final String HOVER_PATH = "hover";
+    private static final String CLICK_PATH = "click";
 
     public BroadcastManager(Configuration configuration) {
         messages = new LinkedList<>();
@@ -35,29 +36,53 @@ public class BroadcastManager {
         for (String key : section.getKeys(false)) {
             final String permission = (String) section.get(key + ".permission");
             final Sound sound = Sound.valueOf((String) section.get(key + ".sound"));
-
             final ConfigurationSection subSection = (ConfigurationSection) section.get(key);
+
+            final BroadcastBuilder builder = BroadcastBuilder.empty()
+                    .sound(sound)
+                    .permission(permission);
 
             if (section.get(key + MESSAGE_PATH) instanceof List) {
                 final List<String> message = Colors.color((List<String>) section.get(key + MESSAGE_PATH));
 
                 if (subSection.contains(CLICK_PATH) || subSection.contains(HOVER_PATH)) {
-                    messages.add(Broadcasts.multiLineWithJson(message, permission, sound, findClick(subSection), findHover(subSection)));
+                    List<TextComponent> components = ComponentUtility.convert(message, findHover(subSection), findClick(subSection));
+                    BroadcastMessage broadcastMessage = builder
+                            .send(player -> components.forEach(component -> player.spigot().sendMessage(component)))
+                            .toBroadcast();
+
+                    messages.add(broadcastMessage);
                     continue;
                 }
 
-                messages.add(Broadcasts.multiLine(message, permission, sound));
+                BroadcastMessage broadcastMessage = builder
+                        .send(player -> message.forEach(player::sendMessage))
+                        .toBroadcast();
+
+                messages.add(broadcastMessage);
                 continue;
             }
 
-            final String message = Colors.color((String) section.get(key + MESSAGE_PATH));
+            final String message = Colors.color(configuration.get("Language.Prefix").toString() + section.get(key + MESSAGE_PATH));
 
             if (subSection.contains(CLICK_PATH) || subSection.contains(HOVER_PATH)) {
-                messages.add(Broadcasts.singleLineWithJson(message, permission, sound, findClick(subSection), findHover(subSection)));
+                final TextComponent component = new TextComponent(message);
+                component.setHoverEvent(findHover(subSection));
+                component.setClickEvent(findClick(subSection));
+
+                BroadcastMessage broadcastMessage = builder
+                        .send(player -> player.spigot().sendMessage(component))
+                        .toBroadcast();
+
+                messages.add(broadcastMessage);
                 continue;
             }
 
-            messages.add(Broadcasts.singleLine(message, permission, sound));
+            BroadcastMessage broadcastMessage = builder
+                    .send(player -> player.sendMessage(message))
+                    .toBroadcast();
+
+            messages.add(broadcastMessage);
         }
     }
 
