@@ -29,7 +29,7 @@ public class BroadcastIt extends JavaPlugin {
         Configuration configuration = optional.get();
         BroadcastManager broadcastManager = new BroadcastManager(optional.get());
 
-        final int time = (int) configuration.get("cooldown-interval");
+        final int time = (int) configuration.get("Cooldown-interval");
         getServer().getScheduler().runTaskTimer(this, broadcastManager.getRunner(), 0L, time * 20L);
 
         CommandManager commandManager = new CommandManager(optional.get());

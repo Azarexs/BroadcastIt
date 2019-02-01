@@ -19,9 +19,9 @@ public class BroadcastManager {
     private Queue<BroadcastMessage> messages;
     private BroadcastRunner runner;
 
-    private static final String MESSAGE_PATH = ".message";
-    private static final String HOVER_PATH = "hover";
-    private static final String CLICK_PATH = "click";
+    private static final String MESSAGE_PATH = ".Message";
+    private static final String HOVER_PATH = "Hover";
+    private static final String CLICK_PATH = "Click";
 
     public BroadcastManager(Configuration configuration) {
         messages = new LinkedList<>();
@@ -34,8 +34,8 @@ public class BroadcastManager {
         ConfigurationSection section = (ConfigurationSection) configuration.get("messages");
 
         for (String key : section.getKeys(false)) {
-            final String permission = (String) section.get(key + ".permission");
-            final Sound sound = Sound.valueOf((String) section.get(key + ".sound"));
+            final String permission = (String) section.get(key + ".Permission");
+            final Sound sound = Sound.valueOf((String) section.get(key + ".Sound"));
             final ConfigurationSection subSection = (ConfigurationSection) section.get(key);
 
             final BroadcastBuilder builder = BroadcastBuilder.empty()
